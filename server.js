@@ -2,6 +2,16 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
+const mariadb = require('mariadb');
+const pool = mariadb.createPool({
+    host: 'localhost',
+    user: 'root',
+    password: 'root',
+    database: 'sample',
+    port: 3306,
+    connectionLimit: 5
+});
+
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const cors = require('cors');
@@ -68,6 +78,45 @@ const prices = {
 
 app.get('/prices', (req, res) => {
     res.json(prices)
+});
+
+/**
+ * @swagger
+ * /foods:
+ *    get:
+ *      description: Return All Food Items
+ *      produces:
+ *          - application/json
+ *      responses:
+ *          200:
+ *              description: Array Of All Food Objects
+ *
+ */
+
+app.get('/foods', (req, res) => {
+    pool.getConnection()
+        .then(conn => {
+
+            conn.query("SELECT * FROM foods;")
+                .then((rows) => {
+                    res.json(rows);
+                    conn.release();
+                })
+                .catch(err => {
+                    console.log(err);
+                    conn.release();
+                });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(503);
+            var result = {
+                "status": "Internal error",
+                "affectedRows": 0,
+                "object": req.body
+            }
+            res.json(result);
+        });
 });
 
 /**
