@@ -121,6 +121,162 @@ app.get('/foods', (req, res) => {
 
 /**
  * @swagger
+ * /resource:
+ *    get:
+ *      description: Return All Agents Items
+ *      produces:
+ *          - application/json
+ *      responses:
+ *          200:
+ *              description: Array Of All Agents Objects
+ *
+ */
+
+app.get('/resource', (req, res) => {
+    pool.getConnection()
+        .then(conn => {
+
+            conn.query("SELECT * FROM agents;")
+                .then((rows) => {
+                    res.json(rows);
+                    conn.release();
+                })
+                .catch(err => {
+                    console.log(err);
+                    conn.release();
+                });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(503);
+            var result = {
+                "status": "Internal error",
+                "affectedRows": 0,
+                "object": req.body
+            }
+            res.json(result);
+        });
+});
+
+/**
+ * @swagger
+ * /customer:
+ *    get:
+ *      description: Return All Customer Items
+ *      produces:
+ *          - application/json
+ *      responses:
+ *          200:
+ *              description: Array Of All Customer Objects
+ *
+ */
+
+app.get('/customer', (req, res) => {
+    pool.getConnection()
+        .then(conn => {
+
+            conn.query("SELECT * FROM customer;")
+                .then((rows) => {
+                    res.json(rows);
+                    conn.release();
+                })
+                .catch(err => {
+                    console.log(err);
+                    conn.release();
+                });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(503);
+            var result = {
+                "status": "Internal error",
+                "affectedRows": 0,
+                "object": req.body
+            }
+            res.json(result);
+        });
+});
+
+/**
+ * @swagger
+ * /company:
+ *    get:
+ *      description: Return All Company Items
+ *      produces:
+ *          - application/json
+ *      responses:
+ *          200:
+ *              description: Array Of All Company Objects
+ *
+ */
+
+app.get('/company', (req, res) => {
+    pool.getConnection()
+        .then(conn => {
+
+            conn.query("SELECT * FROM company;")
+                .then((rows) => {
+                    res.json(rows);
+                    conn.release();
+                })
+                .catch(err => {
+                    console.log(err);
+                    conn.release();
+                });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(503);
+            var result = {
+                "status": "Internal error",
+                "affectedRows": 0,
+                "object": req.body
+            }
+            res.json(result);
+        });
+});
+
+/**
+ * @swagger
+ * /daysorder:
+ *    get:
+ *      description: Return All Daysorder Items
+ *      produces:
+ *          - application/json
+ *      responses:
+ *          200:
+ *              description: Array Of All Daysorder Objects
+ *
+ */
+
+app.get('/daysorder', (req, res) => {
+    pool.getConnection()
+        .then(conn => {
+
+            conn.query("SELECT * FROM daysorder;")
+                .then((rows) => {
+                    res.json(rows);
+                    conn.release();
+                })
+                .catch(err => {
+                    console.log(err);
+                    conn.release();
+                });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(503);
+            var result = {
+                "status": "Internal error",
+                "affectedRows": 0,
+                "object": req.body
+            }
+            res.json(result);
+        });
+});
+
+/**
+ * @swagger
  * /prices:
  *    post:
  *      description: Add A New Food Item With The Price
