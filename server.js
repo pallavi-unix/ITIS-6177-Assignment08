@@ -29,6 +29,14 @@ const options = {
     apis: ['./server.js'],
 };
 
+function validate(req, res, next) {
+  const { name, price } = req.body;
+  if (!name || typeof name !== 'string' || price === undefined || isNaN(price)) {
+    return res.status(400).json({ error: 'Invalid request body' });
+  }
+  next();
+}
+
 const specs = swaggerJsdoc(options);
 
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(specs));
@@ -300,7 +308,7 @@ app.get('/daysorder', (req, res) => {
  *              description: Invalid Request
  */
 
-app.post('/prices', (req, res) => {
+app.post('/prices', validate, (req, res) => {
     const neww = req.body;
     prices.food.push(neww);
     res.status(200).json(neww);
